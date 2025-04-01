@@ -1,6 +1,11 @@
 import Button from "./UI/Button";
+import { useContext } from 'react';
+import CartContext from "../store/CartContext";
 
 const Header = () => {
+    const cartCtx = useContext(CartContext)
+    const totalQuantity = cartCtx.items.reduce((sum, item) => sum + item.quantity, 0);
+
     return (
       <header id="main-header">
         <div id="title">
@@ -8,7 +13,7 @@ const Header = () => {
           <h1>React Food Order App</h1>
         </div>
         <nav>
-        <Button textOnly onClick={() => console.log('Cart clicked')}>Cart (0)</Button>
+        <Button textOnly onClick={() => console.log('Cart clicked')}>Cart ({totalQuantity})</Button>
         </nav>
       </header>
     );
