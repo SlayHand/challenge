@@ -1,3 +1,5 @@
+import Button from "./UI/Button";
+
 const MealItem = ({ meal }) => {
 
     const formattedPrice = new Intl.NumberFormat('et-EE', {
@@ -15,7 +17,9 @@ const MealItem = ({ meal }) => {
             <p className="meal-item-price">{formattedPrice}</p>
           </div>
           <div className="meal-item-actions">
-            <button className="button">Add to Cart</button>
+          <Button onClick={() => console.log(`Added ${meal.name} to cart`)}>
+            Add to Cart
+          </Button>
           </div>
         </article>
       </li>
