@@ -17,8 +17,10 @@ app.use((req, res, next) => {
 });
 
 app.get("/meals", async (req, res) => {
-  const meals = "[]" // data should be read from file
-  res.json(JSON.parse(meals));
+  const filePath = path.join(__dirname, "data", "meals.json");
+  const data = await fs.readFile(filePath, "utf-8");
+  const meals = JSON.parse(data);
+  res.json(meals);
 });
 
 app.use((req, res) => {

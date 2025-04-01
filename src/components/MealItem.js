@@ -1,20 +1,20 @@
-const MealItem = (props) => {
+const MealItem = ({ meal }) => {
     return (
-        <li>
-            <article>
-                <img src={require(`../assets/${props.meal.image}`)} alt={props.meal.name}/>
-                <div>
-                    <h3>{props.meal.name}</h3>
-                    <p>props.meal.price</p>
-                    <p>{props.meal.description}</p>
-                </div>
-                <p>
-                    <button >Add to Cart</button>
-                </p>
-            </article>
-        </li>
-        
-    )
-}
-
-export default MealItem
+      <li className="meal-item">
+        <article>
+          <img src={`./assets/${meal.image}`} alt={meal.name} />
+          <div>
+            <h3>{meal.name}</h3>
+            <p className="meal-item-description">{meal.description}</p>
+            <p className="meal-item-price">{meal.price} €</p>
+          </div>
+          <div className="meal-item-actions">
+            <button className="button">Add to Cart</button>
+          </div>
+        </article>
+      </li>
+    );
+  };
+  
+  export default MealItem;
+  
