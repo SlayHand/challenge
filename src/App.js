@@ -1,12 +1,13 @@
 import Header from './components/Header';
 import Meals from './components/Meals';
 import { CartContextProvider } from './store/CartContext';
-import { useState } from "react";
+import { useState, useContext } from "react";
 import CartModal from "./components/CartModal";
+import CartContext from './store/CartContext';
 
-const App = () => {
-
+const AppContent = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const cartCtx = useContext(CartContext);
 
   const showCartHandler = () => {
     setIsCartOpen(true);
@@ -16,11 +17,21 @@ const App = () => {
     setIsCartOpen(false);
   };
 
- return (
-    <CartContextProvider>
-      {isCartOpen && <CartModal onClose={hideCartHandler} />}
+  return (
+    <>
+      {isCartOpen && cartCtx.items.length > 0 && (
+        <CartModal onClose={hideCartHandler} />
+      )}
       <Header onShowCart={showCartHandler} />
       <Meals />
+    </>
+  )
+}
+
+const App = () => {
+  return (
+    <CartContextProvider>
+      <AppContent />
     </CartContextProvider>
   )
 }
