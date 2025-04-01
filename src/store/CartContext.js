@@ -1,33 +1,48 @@
-import { createContext, useState } from 'react';
+import { createContext, useReducer } from 'react';
 
 const CartContext = createContext({
   items: [],
-  addItem: (item) => {}
+  addItem: (item) => {},
 });
 
+const cartReducer = (state, action) => {
+  if (action.type === 'ADD_ITEM') {
+    const existingItemIndex = state.items.findIndex(
+      (i) => i.id === action.item.id
+    );
+
+    const updatedItems = [...state.items];
+
+    if (existingItemIndex !== -1) {
+      // Kui olemas, suurendame kogust
+      const updatedItem = {
+        ...updatedItems[existingItemIndex],
+        quantity: updatedItems[existingItemIndex].quantity + 1,
+      };
+      updatedItems[existingItemIndex] = updatedItem;
+    } else {
+      // Kui pole veel olemas, lisame uue
+      updatedItems.push({ ...action.item, quantity: 1 });
+    }
+
+    return { items: updatedItems };
+  }
+
+  return state;
+};
+
 export const CartContextProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([
-    // Testandmed kontrolli jaoks
-    { id: 'm1', name: 'Mac & Cheese', quantity: 2 },
-    { id: 'm2', name: 'Margherita Pizza', quantity: 1 }
-  ]);
+  const [cartState, dispatchCartAction] = useReducer(cartReducer, {
+    items: [],
+  });
 
   const addItemHandler = (item) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      } else {
-        return [...prevItems, { ...item, quantity: 1 }];
-      }
-    });
+    dispatchCartAction({ type: 'ADD_ITEM', item });
   };
 
   const contextValue = {
-    items: cartItems,
-    addItem: addItemHandler
+    items: cartState.items,
+    addItem: addItemHandler,
   };
 
   return (
